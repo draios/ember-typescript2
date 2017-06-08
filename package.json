@@ -39,7 +39,8 @@
     "ember-resolver": "^4.0.0",
     "ember-source": "~2.13.0",
     "ember-welcome-page": "^3.0.0",
-    "loader.js": "^4.2.3"
+    "loader.js": "^4.2.3",
+    "typescript": "^2.4.0-dev.20170608"
   },
   "engines": {
     "node": ">= 4"
