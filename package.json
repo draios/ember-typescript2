@@ -1,6 +1,6 @@
 {
   "name": "ember-typescript2",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon",
@@ -30,7 +30,9 @@
     "test": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.0.0"
+    "broccoli-typescript-compiler": "^1.0.1",
+    "ember-cli-babel": "^6.0.0",
+    "typescript": "^2.4.0-dev.20170608"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
