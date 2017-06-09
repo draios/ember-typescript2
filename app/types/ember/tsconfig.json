@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        // "noImplicitAny": true,
+        // "noImplicitThis": false,
+        // "strictNullChecks": true,
+        "baseUrl": "./",
+        "typeRoots": [
+          ".", "../"
+        ],
+        // "types": [],
+        "noEmit": true,
+        // "forceConsistentCasingInFileNames": true
+    },
+    "files": [
+        "index.d.ts",
+        "ember-types.d.ts",
+        "ember-data-types.d.ts",
+        "application-extendable-types.d.ts",
+        "ember-tests.ts"
+    ]
+}

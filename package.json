@@ -1,6 +1,6 @@
 {
   "name": "ember-typescript2",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -47,6 +47,13 @@
     "node": ">= 4"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "before": [
+      "brococoli-babel-transpiler",
+      "ember-cli-babel"
+    ],
+    "after": [
+      "ember-cli-htmlbars"
+    ]
   }
 }
