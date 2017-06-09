@@ -1,11 +1,23 @@
 {
   "name": "ember-typescript2",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "typescript",
+    "ember",
+    "@types"
   ],
   "license": "MIT",
+  "author": {
+    "name" : "Maarten Veenstra @ Sysdig"
+    , "email" : "maartenveenstra@gmail.com"
+    , "url" : "https://github.com/draios/ember-typescript2"
+  },
+  "bugs": {
+    "url" : "https://github.com/draios/ember-typescript2/issues"
+    , "email" : "maartenveenstra@gmail.com"
+  },
   "author": "",
   "directories": {
     "doc": "doc",
