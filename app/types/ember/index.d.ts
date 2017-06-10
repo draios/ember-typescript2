@@ -1,5 +1,6 @@
 /// <reference path="ember-types.d.ts"/>
 /// <reference path="ember-data-types.d.ts"/>
+/// <reference path="rsvp-types.d.ts"/>
 /// <reference path="application-extendable-types.d.ts"/>
 
 //
@@ -26,6 +27,7 @@ declare module "ember" {
   import "application-extendable-types";
   import Ember from "ember-types";
 
+
   //Ember-Data Store is injected in all Ember Routes
   // import EmberData from "ember-data-types";
   // type EmberDataStore = typeof EmberData.Store
@@ -36,9 +38,10 @@ declare module "ember" {
 
 // type EmberArray = Ember.Array
 
+
 declare module "rsvp" {
-  import Ember from "ember-types";
-  export default Ember.RSVP
+  import RSVP from "rsvp-types";
+  export default RSVP
 }
 
 

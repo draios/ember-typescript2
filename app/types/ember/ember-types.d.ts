@@ -1,9 +1,10 @@
 //
 // Ember and EmberData types. based on @types/ember and Typescript 2.x blog posts
 //
+// import RSVP from "rsvp-types"
 
 //
-// actions
+// actions (taken from @types/ember)
 //
 interface ActionsHash {
     // willTransition?: Function
@@ -28,128 +29,73 @@ declare interface ActionHandlerMixin {
 
 
 
-
-
-
-
-// options passed to extend and create
-// interface ObjectOptionsBase {
-//     [key: string]: thisFunc<this>
-// }
+// object passed to Ember.Object.extend()
 interface ObjectOptions // extends ObjectOptionsBase // <T extends EmberObject>
 {
     init?: (this: this) => void,
     willDestroy?: (this: this) => void,
 
-    // @TODO: enable this to allow any type of object property inside extend()
-    // [key: string]: boundAny<this>
-    [key: string]: ((this: this, ...arg: any[]) => any)
-                   & any
 
-
+    // @TODO: uncomment this to allow any type of object property inside extend()
+    [key: string]: any
 }
 
+// Transitions
 interface EmberTransition {
 
 }
 
 
+// object passed to Ember.Route.extend()
 interface RouteOptions extends ObjectOptions
 {
-    // NOTE, whatever model() returns will be the argumnet to setupController()
-    //       there is currently no way to handle this
+    // NOTE, whatever model() returns will be the `model` argument to setupController()? (if its a promise it will be resolved first)
+    //       (there is currently no way to handle this)
+    beforeModel?: (transition?: EmberTransition) => void | RSVP.Promise<any,any> // TODO: type parameter for Promise
+    model?: (params?: object, transition?: EmberTransition) => any
+    setupController?: (controller: EmberController, model: any) => void,
+    renderTemplate?: (controller: EmberController, model: any) => void,
 
-    // @TODO: model = Promise | object?
-    //beforeModel?: (transition: any) => any
-    model?: (this: this & EmberRoute, params?: object, transition?: EmberTransition) => any
-    // @TODO: infer the specific controller type?
-    setupController?: (this: this & EmberRoute, controller: EmberController, model: any) => void,
-    renderTemplate?: (this: this & EmberRoute, controller: EmberController, model: any) => void,
-
-
-
-    // allow any property to be defined on Routes
-    // downside is that undefined properties will also resolve to 'any'
-    // @TODO: can this be inheried from ObjectOptions while keeping it as "fall back" definition
-    //        (it seems the fallback can only be the last definition in an interface)
-    // @TODO?? investigate this more?
-    [key: string]: any
-    // [key: string]:
 }
 
+// base mixin interface
 interface EmberMixin {
 
 }
 
-// base Ember.Object
-// the type parameter is the Type of options passed to Ember.Object.extend()
-// this way we can also typecheck the object passed to configure an object
-// (or component, controller, etc)
-declare interface EmberObject<O extends ObjectOptions> {
-    extend(options: O): this & O
-    extend(mixin1: EmberMixin, options: O): this & O
+// base Ember.Object:
+// NOTE: the type parameter `Opt extends ObjectOptions` is the Type of the options object passed to Ember.Object.extend(),
+// TODO: the typeparameter can probably be removed
+declare interface EmberObject<Opt extends ObjectOptions> {
+    extend<E>(options: E & ThisType<this & E>): this & E
+    extend<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
 
+    // @TODD: typecheck super?
+    _super?: (...args: any[]) => any
 
-
-
-    // get<K extends keyof this, V extends this[K], T extends GettableComputedProperty<V>>(propertyName: K): V;
-
-    // tagged phantom types??
-    // ObjectField<string, Gettable & Settable> ??
-    // T extends ObjectField<V, Gettable> => 
-    // get<K extends keyof this, V extends this[K], T extends V, X extends T<Y, Z>>(propertyName: K): T;
-    // get<K extends keyof this, V extends IObjectProperty<this[K], IGetter>>(propertyName: K): T;
-    // get<K extends keyof this, V extends this[K] & ObjectPropertyReadable<T>, X extends "unWrap", T extends V[X]>(propertyName: K): V;
-    // WORKS:
-    // get<K extends keyof this, V extends this[K], T extends keyof V>(propertyName: K): V[T];
-
-    // 'get' a wrapped type
-    get<
-            K extends keyof this, // "fullName" keyof model (constraint)
-            V extends this[K], // EmberComputedPropertyReadonly<T> extends fullname (constraint)
-            T extends keyof V, // unWrap extends keyof EmberComputedPropertyReadonly
-            X extends V[T] // X = unwrap ( => string)
-        >(propertyName: K): X;
     get<
             K extends keyof this, // "fullName" keyof model (constraint)
             V extends this[K] // EmberComputedPropertyReadonly<T> extends fullname (constraint)
         >(propertyName: K): V;
 
-    // NOTE: no set() defined for wrapped types, preventing set() on computed properties (not 100% safe but)
 
+    // NOTE:
+    // no set() defined for wrapped types, this prevents calling set() for computed properties
+    // (not 100% safe but it works)
     set<
             K extends keyof this, // K = "fullName" <keyof this>
             V extends this[K] // WrappedV = IObjectPropertyReadAndWritable<string>
         >(propertyName: K, value: V): V;
-
-
-
-
 }
 
-// making computedproperties readonly automatically isn't currently possible
-// https://github.com/Microsoft/TypeScript/issues/13257
-
-
-// interface Writable<T> {
-//     unWrap: T
-// }
-
-// interface getTypeParam<T> {
-//     (v: ObjectPropertyReadable<T>): T
-// }
-// type SettableComputedPropertyTypes<T extends SettablePropertyTypes> = string
-// type SettablePropertyTypes = string | boolean | number | Date
-
+// Components
 declare interface EmberComponent extends EmberObject<ObjectOptions> {
 }
 
 
 
+// Controllers
 declare interface EmberController extends EmberObject<ObjectOptions> {
-    // extend: (confObj: T) => T & EmberComponent,
-    // extend(options: ObjectOptions<EmberComponent>): typeof EmberComponent
-    //  create: (o: object | null) => void
     reset: () => void
 }
 
@@ -160,71 +106,50 @@ declare interface EmberController extends EmberObject<ObjectOptions> {
 
 
 
-// declare class EmberRoute extends EmberObject implements ActionHandlerMixin {
+// Routes
+// @TODO: docblocks for IDE integration?
+/**
+ Ember.Route
+   */
 interface EmberRoute extends EmberObject<RouteOptions> {
-    // extend: (confObj: T) => T & EmberRoute,
-    // extend(options: RouteOptions): this
-    // static create: (o: object | null) => void
     send?: any,
-
-
-    // store is injected on all routes by Ember
-    // store: EmberDataStore
-
 }
 
+
+
+// Router
+type EmberRouterRouteCallback<T> = (this: T) => void
+type EmberRouterRouteConfig = { resetNamespace?: boolean, path?: string }
 interface EmberRouter extends EmberObject<ObjectOptions> {
-    map(routesCallback: () => void): void
+    // extend<Opt extends ObjectOptions>(options: Opt): EmberRouter & ThisType<Opt & EmberRouter>
+
+    route(this: this, path: string): void & ThisType<this>
+    route(this: this, path: string, routeCfgOrCallback: EmberRouterRouteConfig | EmberRouterRouteCallback<this>): void & ThisType<this>
+    route(this: this, path: string, routeCfg: EmberRouterRouteConfig, routeCallback: EmberRouterRouteCallback<this>): void & ThisType<this>
+    map(this: this, routesCallback: (this: this) => void): void & ThisType<this>
 }
 
 
-
-
-
-//
-// HACK: we want to allow any type of value, but if value is a function,
-//       we want to specify it's "this" context
-//
-// type boundAny<T> = ((this: T, ...arg: any[]) => any)
-//                  | EmberService
-//                  | EmberObject<ObjectOptions>
-//                  | string
-//                  | number
-//                  | boolean
-//                  | Array<T>
-//                  | object
 
 
 
 // type ObjectMethod<T> = ((this: T, ...arg: any[]) => any)
 interface ServiceOptions extends ObjectOptions {
-    // [key: string]: ObjectMethod<this>
-    //                | any
 }
 
 //
 // dependency injection
 //
-interface EmberService extends EmberObject<ServiceOptions> { }
-// declare namespace Ember {
+interface EmberService extends EmberObject<ServiceOptions> {}
 
+interface dependencyInjection {
+    service: serviceLookup
+    // @TODO: create an index of available controllers?
+    controller: (name?: string) => EmberController
 
-    interface dependencyInjection {
-        service: serviceLookup
-        // @TODO: create an index of available controllers?
-        controller: (name?: string) => EmberController
+}
 
-    }
-
-    type serviceLookup = <K extends keyof _serviceTypeIndex>(serviceName: K) => _serviceTypeIndex[K]
-
-    // interface Service {
-    //     test: string
-    // }
-
-    // declare var Service : Service
-    // class EmberService {}
-// }
+type serviceLookup = <K extends keyof _serviceTypeIndex>(serviceName: K) => _serviceTypeIndex[K]
 
 
 
@@ -242,36 +167,6 @@ type setter = <T, K extends keyof T, V extends any>(obj: T, propertyName: K, val
 type guidFor = <T extends object>(obj: T) => string
 type isNone = (val: any) => boolean
 type assert = (desc: string, obj: any) => void
-declare interface EmberComputedProperty extends EmberObject<ObjectOptions> {
-}
-// T = Type
-// G = Getter, Setter, etc
-// declare interface IObjectProperty<T, Traits> {
-//     unWrap: T
-// }
-// interface IGetter { }
-// interface ISetter { }
-
-// ????????????? `this` context inside computed property?
-// via <this> type used inside of the generic type?
-// see also computed<>
-declare interface EmberComputedPropertyReadonly<T> {
-    unWrap: T
-}
-// declare interface IObjectPropertyReadAndWritable<T> extends EmberComputedPropertyReadonly<T> {
-
-    // inherits unWrap
-// }
-// interface Gettable<T> {
-    
-// }
-
-// interface Settable<T> {
-    // NOTE:
-    // this is more of a hack to distinquish gettable properties with (more "specialized") settable properties
-    // more 'specialized' than just a getter?
-    // we cant test for property==computed property, but this way we can check if its not a computed prop?
-// }
 
 interface EmberLogger extends EmberObject<ObjectOptions> {
     assert(assertion: boolean): void
@@ -288,7 +183,7 @@ interface ApplicationOptions {
   Resolver: any
 }
 interface EmberApplication extends EmberObject<ApplicationOptions> {
-    
+
 }
 
 
@@ -296,20 +191,26 @@ interface EmberApplication extends EmberObject<ApplicationOptions> {
 // Ember.RSVP.Promise
 //
 
-type PromiseResolver = (resolve: any, reject: any) => void
-interface EmberRSVPPromise {
-    new (resolver: PromiseResolver, label?: string): EmberRSVPPromise
-}
-interface EmberRSVP {
-    Promise: EmberRSVPPromise
-}
+// TODO: type parameter
+// T = type of data returned on success
+// E = type of error returned on failure
+// type PromiseResolverSuccess<T> = (this: void, result: T) => void
+// type PromiseResolverFail<E> = (this: void, error: E) => void
+// type PromiseResolver<T,E> = (resolve: PromiseResolverSuccess<T>, reject: PromiseResolverFail<E>) => void
+// interface EmberRSVPPromise<T,E> {
+//     new (resolver: PromiseResolver<T,E>, label?: string): EmberRSVPPromise<T,E>
+// }
+
+// declare module EmberRSVP {
+//     type Promise<T,E> = EmberRSVPPromise<T,E>
+// }
 
 
 // interfaces with generic
 // declare global {
     // EmberArray: like a JS array but with some additional methods (objectAt, etc)
     interface EmberArray<T> extends Array<T> {
-        
+
     }
 // }
 
@@ -348,7 +249,7 @@ interface EmberString {
 
 // @TODO: define as `interface` instead of `namespace`?
 // import * as $ from "jquery";
-declare namespace Ember {
+declare module Ember {
 
     // export all pieces of the Ember framework
     let Object    : EmberObject<ObjectOptions>
@@ -356,10 +257,12 @@ declare namespace Ember {
     let Component : EmberComponent
     let Route     : EmberRoute
     let Router    : EmberRouter
+    // type Service  = EmberService
     let Service   : EmberService
     let Logger    : EmberLogger
     let Application : EmberApplication
-    let RSVP : EmberRSVP
+    // let RSVP      : RSVP
+    // type RSVP = RSVP
     // TODO: expose generic types
     type Array<T> = EmberArray<T>
     //let HTMLBars  : EmberHTMLBars
@@ -381,11 +284,18 @@ declare namespace Ember {
     let assert    : assert
 
     // computed properties
-    // EmberComputedPropertyReadonly<T>: makes it possible to catch accidental set() on a computed property
-    function computed<T>(observedProperty1: string, fn: () => T): EmberComputedPropertyReadonly<T>
-    function computed<T>(observedProperty1: string, observedProperty2: string, fn: () => T): EmberComputedPropertyReadonly<T>
-    function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, fn: () => T): EmberComputedPropertyReadonly<T>
-    // // ...extend number of observed properties as needed
+    // wrapping the computed properties in a type such as "EmberComputedPropertyReadonly<T>" would
+    // make it possible to catch accidental set() on a computed property (though it seems this
+    // can lead to issues if we assign properties like `store` to type EmberDataStore, and then attempt to `this.get('store')`)
+
+    // @TODO:
+    // - guard computed properties against overwriting through `.set()`
+    // - fix the `this` context (either with a `this parameter` or a `ThisType<T>` annotation)
+    type ComputedPropertyFunc<T> = () => T
+    function computed<T>(observedProperty1: string, fn: ComputedPropertyFunc<T>): T
+    function computed<T>(observedProperty1: string, observedProperty2: string, fn: ComputedPropertyFunc<T>): T
+    function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, fn: ComputedPropertyFunc<T>): T
+    // ...extend number of observed properties as needed
 
 
 
@@ -398,17 +308,21 @@ declare namespace Ember {
 }
 
 
-// import Em = Ember;
+// allow import Ember from "./ember-types" (relative path)
+// export default Ember
 
 
+// allow import Ember from "ember-types"
 declare module "ember-types" {
 // declare module Ember {
     export default Ember
 }
 
-
 // TODO: tie ember and ember-data together via index.d.ts
 interface EmberRoute {
     // declare the Ember Data Store injection for all Ember.Routes
+
+    setupController?: (controller: EmberController, model: any) => void,
+    extend<E extends RouteOptions>(options: E & ThisType<this & E>): this & E
     store: EmberDataStore
 }
