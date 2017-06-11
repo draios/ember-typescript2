@@ -8,7 +8,7 @@ For more information on using ember-cli, visit
 
 ## WARNING: EXPERIMENTAL ADDON
 
-Please note that the type declarations are in an early stage and far from complete. The addon itself hasn't been fully tested and won't catch all errors in your code (although it will help a lot!). Also the way the Broccoli funnel is set up is still kind of hacky.
+Please note that the type declarations are in an early stage and far from complete. The addon itself hasn't been fully tested and won't catch all errors in your code (although it will help a lot!). Also the way the Broccoli funnel set registers the TypeScript preprocessor is very hacky (see [`index.js`](index.js): if you have any other .js preprocessors besides Babel, this hack might break your ember build.
 
 > If you want to help out with this project, pull requests are welcomed!
 
@@ -46,7 +46,7 @@ $ ember install ember-typescript2
 
 This will install a *tsconfig.json*, and some extendable interfaces in *app/types/application.d.ts* (see section ModelTypeIndex below).
 
-### Usage 
+### Usage
 
 Run **ember serve** and you should see the result of Typescript type checking:
 
@@ -64,7 +64,7 @@ Menu: _View > Command Pallette .... > Language Mode > Typescript_
 ### Running TypeScripts' compiler (`tsc`) standalone
 
 Note that for your convenience, a tsconfig.json is installed in
-your projects root. This allows for better IDE integration, and you can also 
+your projects root. This allows for better IDE integration, and you can also
 run Typescript in standalone mode on your project:
 
 Install Typescript globally:
@@ -122,7 +122,7 @@ export default Ember.Route.extend({
 
 ## Type of `this` in methods (via ThisType):
 
-As of Typescript 2.3, it is now possible to properly set the `this` context within Ember methods. Where the following code would previously break down, Typescript can now understand the following Ember code:
+As of [Typescript 2.3](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-3.html), it is now possible to properly set the `this` context within Ember methods. Where the following code would previously break down, Typescript can now understand the following Ember code:
 
 ```typescript
 export default Ember.Component.extend({
@@ -172,9 +172,9 @@ TypeScript's type inference features makes it possible to generate types for you
   - the existence of a model with name `user` is checked
   - the created record will be of type User (NOTE: see section MoodelTypeIndex below to set this up)
   - model.get(key) works (as model extends from Ember.Object)
-  
+
 > WARNING: computed properties aren't TypeSafe, and you won't get a Type error if you try to call set() on a computed property. However if you define your computed properties as readOnly(), Ember will give you a runtime error, which is still preferable above a silent failure
-  
+
 ## Other features:
 
 - type errors when using deprecated Ember feature flags like MODEL_FACTORY_INJECTIONS (needs to be extended)
@@ -224,15 +224,16 @@ MyObj.set('computedProp', 'a new value'):
 // no warnings from typescript when overwriting a computed property
 ```
 
-When writing code that uses MyObj, it will look like `computedProp` is a string, while it is actually a computed property.
+When writing code that uses `MyObj`, it will seem like `computedProp` is a simple string, while it is actually a computed property.
 Ideally we would be able to distinquish between readonly computed properties and simple properties of an object.
-To workaround this problem, you could define your own interfaces for your models, and declare some properties to be `readonly`. 
+
+> To workaround this problem on inferred model types, you could define your own explicit interfaces for your models, and declare some properties to be `readonly`.
 
 
-## Advanced configuration
+# Advanced configuration
 
 A little bit of configuration is needed to enable typechecking on models and services.
-This section describes how to make use of the generated files in app/types/*.d.ts.
+This section describes how to make use of the generated `app/types/application.d.ts`.
 
 ## ModelTypeIndex
 
@@ -257,7 +258,7 @@ interface ModelTypeIndex {
 }
 ```
 
-Using the above `ModelTypeIndex`, Typescript is able to understand 
+Using the above `ModelTypeIndex`, Typescript is able to understand
 
 ```typescript
 var user = this.store.createRecord('user', /* ... */);
@@ -293,3 +294,12 @@ Pull requests are welcome! This addon still needs a lot of work, and we
 are very happy to get input from the Ember and Typescript
 communities.
 
+----
+
+### Sources
+
+https://github.com/emberwatch/ember-cli-typescript
+https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-1.html
+https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-3.html
+https://github.com/Microsoft/TypeScript/issues/15836
+https://discuss.emberjs.com/t/ember-and-typescript/2898/68
