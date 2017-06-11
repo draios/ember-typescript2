@@ -9,16 +9,15 @@
     "@types"
   ],
   "license": "MIT",
-  "author": {
-    "name" : "Maarten Veenstra @ Sysdig"
-    , "email" : "maartenveenstra@gmail.com"
-    , "url" : "https://github.com/draios/ember-typescript2"
+   "author": {
+    "name" : "Maarten Veenstra @ Sysdig",
+    "email" : "maartenveenstra@gmail.com",
+    "url" : "https://github.com/draios/ember-typescript2"
   },
   "bugs": {
-    "url" : "https://github.com/draios/ember-typescript2/issues"
-    , "email" : "maartenveenstra@gmail.com"
+    "url": "https://github.com/draios/ember-typescript2/issues",
+    "email": "maartenveenstra@gmail.com"
   },
-  "author": "",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -32,7 +31,7 @@
   "dependencies": {
     "broccoli-typescript-compiler": "^1.0.1",
     "ember-cli-babel": "^6.0.0",
-    "typescript": "^2.4.0-dev.20170608"
+    "typescript": "^2.3.4"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
@@ -55,7 +54,7 @@
     "ember-source": "~2.13.0",
     "ember-welcome-page": "^3.0.0",
     "loader.js": "^4.2.3",
-    "typescript": "^2.4.0-dev.20170608"
+    "typescript": "^2.3.4"
   },
   "engines": {
     "node": ">= 4"
