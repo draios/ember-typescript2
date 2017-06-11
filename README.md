@@ -221,7 +221,7 @@ let computedVal = MyObj.get('computedProp')
 //      ^--- type of `computedVal` is string
 
 MyObj.set('computedProp', 'a new value'):
-// no warnings from typescript
+// no warnings from typescript when overwriting a computed property
 ```
 
 When writing code that uses MyObj, it will look like `computedProp` is a string, while it is actually a computed property.
