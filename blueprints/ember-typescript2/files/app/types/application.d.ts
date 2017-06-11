@@ -101,7 +101,7 @@
 //
 // TODO: We use a global but perhaps we can just import and re-export the _modelTypeIndex and _serviceTypeIndex?
 //
-declare global {
+//declare global {
     //
     // Model index: this maps the name of models with their actual types, e.g. stuff like
     //
@@ -177,4 +177,4 @@ declare global {
     interface EmberComponent {
         // add your service injections here
     }
-}
+//}

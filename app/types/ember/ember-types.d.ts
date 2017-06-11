@@ -86,19 +86,8 @@ declare interface EmberObject<Opt extends ObjectOptions> {
     // @TODD: typecheck super?
     _super?: (...args: any[]) => any
 
-    get<
-            K extends keyof this, // "fullName" keyof model (constraint)
-            V extends this[K] // EmberComputedPropertyReadonly<T> extends fullname (constraint)
-        >(propertyName: K): V;
-
-
-    // NOTE:
-    // no set() defined for wrapped types, this prevents calling set() for computed properties
-    // (not 100% safe but it works)
-    set<
-            K extends keyof this, // K = "fullName" <keyof this>
-            V extends this[K] // WrappedV = IObjectPropertyReadAndWritable<string>
-        >(propertyName: K, value: V): V;
+    get<K extends keyof this>(propertyName: K): this[K];
+    set<K extends keyof this, V extends this[K]>(propertyName: K, value: V): V;
 }
 
 // Components
