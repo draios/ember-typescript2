@@ -5,6 +5,8 @@ This README outlines the details of collaborating on this Ember addon (_see: "Co
 For more information on using ember-cli, visit
 [https://ember-cli.com/](https://ember-cli.com/).
 
+For more information about TypeScript, visit [www.typescriptlang.org/](https://www.typescriptlang.org/).
+
 
 ## WARNING: EXPERIMENTAL ADDON
 
