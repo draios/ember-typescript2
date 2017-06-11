@@ -1,4 +1,5 @@
-import EmberData from "ember-data"
+// import EmberData from "ember-data-types"
+import Ember from "ember-types"
 
 
 
@@ -23,9 +24,11 @@ declare global {
 }
 
 
+// @TODO: more lookup type indexes?
+//         e.g. this.controllerFor, etc
 
 
-
+// @TODO use a module instead of a global (if possible)
 /*
 declare module "application-extendable-types" {
     type ServiceTypeIndex = _serviceTypeIndex

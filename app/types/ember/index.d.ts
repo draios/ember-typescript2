@@ -27,7 +27,6 @@ declare module "ember" {
   import "application-extendable-types";
   import Ember from "ember-types";
 
-
   //Ember-Data Store is injected in all Ember Routes
   // import EmberData from "ember-data-types";
   // type EmberDataStore = typeof EmberData.Store

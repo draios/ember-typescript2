@@ -3,6 +3,16 @@
 //
 // import RSVP from "rsvp-types"
 
+
+
+
+
+
+
+
+
+
+
 //
 // actions (taken from @types/ember)
 //
@@ -70,6 +80,9 @@ declare interface EmberObject<Opt extends ObjectOptions> {
     extend<E>(options: E & ThisType<this & E>): this & E
     extend<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
 
+    create<E>(options: E & ThisType<this & E>): this & E
+    create<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
+
     // @TODD: typecheck super?
     _super?: (...args: any[]) => any
 
@@ -97,6 +110,7 @@ declare interface EmberComponent extends EmberObject<ObjectOptions> {
 // Controllers
 declare interface EmberController extends EmberObject<ObjectOptions> {
     reset: () => void
+    transitionToRoute: (routeName: string) => void
 }
 
 
@@ -111,8 +125,11 @@ declare interface EmberController extends EmberObject<ObjectOptions> {
 /**
  Ember.Route
    */
-interface EmberRoute extends EmberObject<RouteOptions> {
+    
+declare interface EmberRoute extends EmberObject<RouteOptions> {
     send?: any,
+
+    transitionTo: (routeName: string) => void
 }
 
 
@@ -256,7 +273,7 @@ declare module Ember {
     let Controller: EmberController
     let Component : EmberComponent
     let Route     : EmberRoute
-    let Router    : EmberRouter
+    // let Router    : EmberRouter
     // type Service  = EmberService
     let Service   : EmberService
     let Logger    : EmberLogger
@@ -290,7 +307,7 @@ declare module Ember {
 
     // @TODO:
     // - guard computed properties against overwriting through `.set()`
-    // - fix the `this` context (either with a `this parameter` or a `ThisType<T>` annotation)
+    // - set the proper `this` context (either with a `this parameter` or a `ThisType<T>` annotation)
     type ComputedPropertyFunc<T> = () => T
     function computed<T>(observedProperty1: string, fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, observedProperty2: string, fn: ComputedPropertyFunc<T>): T

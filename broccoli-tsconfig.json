@@ -110,7 +110,9 @@
 
   "exclude": [
     "app/templates",
-    "app/tests"
+    "app/tests",
+    "app/initializers",
+
 
     // "node_modules",
     // "bower_components",

@@ -1,7 +1,5 @@
-import Ember from "ember"
-import DS from "ember-data"
-
 // This file enables Typescript to typecheck models and services
+
 //
 // If you see type errors like:
 //
@@ -136,7 +134,47 @@ declare global {
     }
 
 
+    //
+    // Initializers
+    //
+    // Check your app/initializers/*.js
+    //
+    // Example:
+    // with an initializer like the following:
+    // ----------------------------------------------------------
+    //    // app/initializers/session.js
+    //    export function initialize(application) {
+    //        application.inject('controller', 'sessionService', 'service:session');
+    //        application.inject('route', 'sessionService', 'service:session');
+    //        application.inject('component', 'sessionService', 'service:session');
+    //    }
+    //
+    //    export default {
+    //        name: 'session',
+    //        initialize: initialize
+    //    };
+    // ----------------------------------------------------------
+    //
+    // Augment the EmberController, EmberRoute, and EmberComponent as follows:
+    //
+    // ----------------------------------------------------------
+    //    // app/types/application.d.ts
+    //    interface EmberRoute {
+    //        sessionService: typeof SessionService
+    //    }
+    // ----------------------------------------------------------
+    //
+    // (it is assumed the SessionService is already imported in this application.d.ts)
+    //
 
 
+    interface EmberRoute {
+        // add your service injections here
+    }
+    interface EmberController {
+        // add your service injections here
+    }
+    interface EmberComponent {
+        // add your service injections here
+    }
 }
-

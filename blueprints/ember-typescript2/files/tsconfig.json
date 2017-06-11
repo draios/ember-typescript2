@@ -31,7 +31,7 @@
 
     /* Strict Type-Checking Options */
     "strict": false,                            /* Enable all strict type-checking options. */
-    // "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
+    "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
     // "strictNullChecks": true,              /* Enable strict null checks. */
     "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
     // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
@@ -47,8 +47,6 @@
     "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
 
     "paths": {                               /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
-      "app/tests/*": ["tests/*"],
-      "app/*": ["app/*"]
     },
 
     "rootDirs": ["app", "node_modules/ember-typescript2/app"], /* List of root folders whose combined content represents the structure of the project at runtime. */
@@ -99,8 +97,9 @@
     "tests",
 
     // "app/models/",
-    "app/app.ts",
-    "app/router.ts"
+    // "app/app.ts",
+    // "app/router.ts",
+    "app/initializers"
 
 
     // "app/typescript"
