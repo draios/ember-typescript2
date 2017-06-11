@@ -1,4 +1,5 @@
 // This file enables Typescript to typecheck models and services
+// @TODO: this file could be generated automatically?
 
 //
 // If you see type errors like:
@@ -27,7 +28,6 @@
 // - each module is added to an index, effectively enabling Type script to find each module by name
 //
 
-// @TODO: this file could be generated automatically?
 
 
 
