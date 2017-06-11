@@ -298,8 +298,8 @@ communities.
 
 ### Sources
 
-https://github.com/emberwatch/ember-cli-typescript
-https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-1.html
-https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-3.html
-https://github.com/Microsoft/TypeScript/issues/15836
-https://discuss.emberjs.com/t/ember-and-typescript/2898/68
+- https://github.com/emberwatch/ember-cli-typescript
+- https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-1.html
+- https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-3.html
+- https://github.com/Microsoft/TypeScript/issues/15836
+- https://discuss.emberjs.com/t/ember-and-typescript/2898/68
