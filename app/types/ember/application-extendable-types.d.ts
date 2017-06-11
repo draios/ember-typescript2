@@ -1,5 +1,7 @@
-// import EmberData from "ember-data-types"
-import Ember from "ember-types"
+/// <reference path="ember-types.d.ts"/>
+/// <reference path="ember-data-types.d.ts"/>
+import EmberData from "ember-data"
+import Ember from "ember"
 
 
 

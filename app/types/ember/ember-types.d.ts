@@ -133,10 +133,10 @@ declare interface EmberRoute extends EmberObject<RouteOptions> {
 }
 
 
-
 // Router
 type EmberRouterRouteCallback<T> = (this: T) => void
 type EmberRouterRouteConfig = { resetNamespace?: boolean, path?: string }
+
 interface EmberRouter extends EmberObject<ObjectOptions> {
     // extend<Opt extends ObjectOptions>(options: Opt): EmberRouter & ThisType<Opt & EmberRouter>
 
@@ -273,7 +273,7 @@ declare module Ember {
     let Controller: EmberController
     let Component : EmberComponent
     let Route     : EmberRoute
-    // let Router    : EmberRouter
+    let Router    : EmberRouter
     // type Service  = EmberService
     let Service   : EmberService
     let Logger    : EmberLogger
