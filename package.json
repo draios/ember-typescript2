@@ -1,6 +1,6 @@
 {
   "name": "ember-typescript2",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Drop-in Ember CLI addon for TypeScript 2.3+ (experimental)",
   "keywords": [
     "ember-addon",

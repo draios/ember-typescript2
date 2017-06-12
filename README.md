@@ -14,6 +14,14 @@ Please note that the type declarations are in an early stage and far from comple
 
 > If you want to help out with this project, pull requests are welcomed!
 
+### How is this different from @types/ember or ember-cli-typescript?
+
+In short, ember-cli-typescript depends @ttypes/ember, which definitions are based on TypeScript 1.x.
+While providing autocompletion features, these definitions provide little type safety.
+
+**ember-typescript2** includes rewritten TypeScript 2.3 definitions (still a work in progress), and
+an experimental `application.d.ts` file that enables type checking on models and services too.
+
 
 # What's included?
 
