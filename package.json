@@ -1,7 +1,7 @@
 {
   "name": "ember-typescript2",
-  "version": "0.4.4",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.4.5",
+  "description": "Drop-in Ember CLI addon for TypeScript 2.3+ (experimental)",
   "keywords": [
     "ember-addon",
     "typescript",
@@ -22,7 +22,11 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository" :
+  {
+    "type" : "git",
+    "url": "https://github.com/draios/ember-typescript2.git"
+  },
   "scripts": {
     "build": "ember build",
     "start": "ember server",
