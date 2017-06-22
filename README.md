@@ -14,6 +14,8 @@ Please note that the type declarations are in an early stage and far from comple
 
 > If you want to help out with this project, pull requests are welcomed!
 
+
+
 ### How is this different from @types/ember or ember-cli-typescript?
 
 In short, ember-cli-typescript depends @types/ember, which definitions are based on TypeScript 1.x.
@@ -21,6 +23,17 @@ While providing autocompletion features, these definitions provide little type s
 
 **ember-typescript2** includes rewritten TypeScript 2.3 definitions (still a work in progress), and
 an experimental `application.d.ts` file that enables type checking on models and services too.
+
+# Changelog
+
+## 0.5.0
+
+- fixed `ThisType<T>` annotation for Ember.Object hooks and methods (now
+  all your methods should have the right `this` context!)
+- fixed `this.store.createRecord` type
+- added basic types for BuildURLMixin
+- silenced warnings for internal Ember CLI modules when running `ember serve`
+
 
 
 # What's included?
