@@ -23,7 +23,7 @@ interface EmberDataStore extends EmberService {
     createRecord: <K extends keyof _modelTypeIndex, V extends _modelTypeIndex[K]>(modelName: K, inputProperties: V) => _modelTypeIndex[K]
     peakRecord: <K extends keyof _modelTypeIndex>(modelName: K, modelId: ModelId) => _modelTypeIndex[K]
     findRecord: <K extends keyof _modelTypeIndex>(modelName: K, modelId: ModelId) => RSVP.Promise<_modelTypeIndex[K], any>
-    findAll: <K extends keyof _modelTypeIndex>(modelName: K) => RSVP.Promise<EmberArray<_modelTypeIndex[K]>, any>
+    findAll: <K extends keyof _modelTypeIndex>(modelName: K) => RSVP.Promise<Ember.Array<_modelTypeIndex[K]>, any>
 
     serializerFor: <K extends keyof _modelTypeIndex>(modelName: K) => EmberDataRESTSerializer // @TODO: should be EmberDataSerializer
 
@@ -36,7 +36,7 @@ interface EmberDataStore extends EmberService {
 // - any computed properties are wrapped into EmberComputedPropertyReadonly<T>
 // - EmberComputedPropertyReadonly is only accessible by get() and not by set()
 //
-interface EmberDataModel extends EmberObject<EmberDataModelOptions> {
+interface EmberDataModel extends Ember.Object<EmberDataModelOptions> {
     // TODO: this is somehow needed for get/set tuypechecking? (the inherited EmberObject is not enough)
     // extend<O extends EmberDataModelOptions>(options: O): this & O,
 
@@ -104,7 +104,6 @@ interface EmberDataHasMany {
 
 
 
-
 interface EmberDataSnapshotObject {
     id: string
     record: EmberDataModel
@@ -134,13 +133,15 @@ interface EmberDataRESTSerializer extends EmberObject<EmberDataRESTSerializerOpt
 
 // this should include our overrides
 interface EmberDataRESTAdapterOptions {
-    updateRecord?: (store: EmberDataStore, type: EmberDataModel, snapshot: EmberDataSnapshotObject, options: object) => RSVP.Promise<any,any>
+    // updateRecord?: (store: EmberDataStore, type: EmberDataModel, snapshot: EmberDataSnapshotObject, options: object) => RSVP.Promise<any,any>
+    updateRecord?: (store: EmberDataStore, type: EmberDataModel, snapshot: EmberDataSnapshotObject /*, options: object */) => RSVP.Promise<any,any>
     namespace?: string
     pathForType?: () => string
+    createRecord?: (store: EmberDataStore, type: EmberDataModel, snapshot: EmberDataSnapshotObject /*, options: object */) => RSVP.Promise<any,any>
 }
 
 // this should include any build-in properties or methods
-interface EmberDataRESTAdapter extends EmberObject<EmberDataRESTAdapterOptions> {
+interface EmberDataRESTAdapter extends EmberObject<EmberDataRESTAdapterOptions>, EmberDataBuilddURLMixin {
     ajax: (url: string, method: string, options: object) => RSVP.Promise<any,any>
 
 
@@ -148,14 +149,59 @@ interface EmberDataRESTAdapter extends EmberObject<EmberDataRESTAdapterOptions> 
     buildUrl: (modelName: keyof _modelTypeIndex, id: string | number | Array<string|number>, snapshot: EmberDataSnapshotObject, requestType: string, query: object ) => string
 }
 
+
+interface EmberDataBuildURLMixin {
+
+    host?: string
+    namespace?: string
+
+    buildURL: (modelName: keyof _modelTypeIndex, id?: string | number | Array<string|number>, snapshot?: EmberDataSnapshotObject, requestType?: string, query?: object ) => string
+
+    pathForType: (modelName: keyof _modelTypeIndex) => string
+
+    // urlPrefix: (path: string, parentURL: string) => string
+    urlPrefix: (path?: string, parentURL?: string) => string
+
+    // @TODO:
+    // urlForCreateRecord
+    // urlForDeleteRecord
+    // urlForFindAll
+    // urlForFindBelongsTo
+    // urlForFindHasMany
+    // urlForFindMany
+    // urlForFindRecord
+    // urlForQuery
+    // urlForQueryRecord
+    // urlForUpdateRecord
+    // urlPrefix
+
+    // @TODO: actually part of DS.BuildUrlMixin
+    buildUrl: (modelName: keyof _modelTypeIndex, id: string | number | Array<string|number>, snapshot: EmberDataSnapshotObject, requestType: string, query: object ) => string
+}
+
+
+//
+// EmbeddedRecordsMixin
+//
 interface EmberDataEmbeddedRecordsMixin extends EmberMixin {}
 
 
 
 //
+// FixtureAdapter
+//
+interface EmberDataFixtureAdapterOptions {
+
+}
+interface EmberDataFixtureAdapter extends Ember.Object<EmberDataFixtureAdapterOptions> {
+
+}
+
+//
 //
 //
 declare module EmberData {
+    // expose actual EmberData objects so we can actually typecheck inside JS code
     let Model : EmberDataModel
     let attr  : EmberDataAttr
     let belongsTo  : EmberDataBelongsTo
@@ -164,6 +210,27 @@ declare module EmberData {
     let EmbeddedRecordsMixin  : EmberDataEmbeddedRecordsMixin
     let RESTAdapter : EmberDataRESTAdapter
     let Store : EmberDataStore
+
+    let BuildURLMixin : EmberDataBuildURLMixin
+
+
+    // expose the types so interfaces can extend from EmberData
+    type Model = EmberDataModel
+    type attr  = EmberDataAttr
+    type belongsTo  = EmberDataBelongsTo
+    type hasMany  = EmberDataHasMany
+    type RESTSerializer  = EmberDataRESTSerializer
+    type EmbeddedRecordsMixin  = EmberDataEmbeddedRecordsMixin
+    type RESTAdapter = EmberDataRESTAdapter
+    type FixtureAdapter = EmberDataFixtureAdapter
+    type Store = EmberDataStore
+    type BuildURLMixin = EmberDataBuildURLMixin
+
+
+    // internals
+    type SnapshotObject = EmberDataSnapshotObject
+
+
 }
 
 

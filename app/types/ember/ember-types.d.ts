@@ -36,6 +36,20 @@ declare interface ActionHandlerMixin {
 }
 
 
+// Transitions
+interface EmberTransition {
+
+}
+
+
+
+
+// base mixin interface
+interface EmberMixin extends EmberObject<ObjectOptions> {
+
+}
+
+
 
 
 
@@ -50,46 +64,36 @@ interface ObjectOptions // extends ObjectOptionsBase // <T extends EmberObject>
     [key: string]: any
 }
 
-// Transitions
-interface EmberTransition {
 
-}
-
-
-// object passed to Ember.Route.extend()
-interface RouteOptions extends ObjectOptions
-{
-    // NOTE, whatever model() returns will be the `model` argument to setupController()? (if its a promise it will be resolved first)
-    //       (there is currently no way to handle this)
-    beforeModel?: (transition?: EmberTransition) => void | RSVP.Promise<any,any> // TODO: type parameter for Promise
-    model?: (params?: object, transition?: EmberTransition) => any
-    setupController?: (controller: EmberController, model: any) => void,
-    renderTemplate?: (controller: EmberController, model: any) => void,
-
-}
-
-// base mixin interface
-interface EmberMixin extends EmberObject<ObjectOptions> {
-
-}
-
-// base Ember.Object:
-// NOTE: the type parameter `Opt extends ObjectOptions` is the Type of the options object passed to Ember.Object.extend(),
-// TODO: the typeparameter can probably be removed
+//
+// Ember.Object
+//
 declare interface EmberObject<Opt extends ObjectOptions> {
-    extend<E>(options: E & ThisType<this & E>): this & E
-    extend<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
-    extend<E>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this & E>): this & E
-    extend<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this & E>): this & E
-    extend<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this & E>): this & E
+    // TODO
+    _optionsObjectType: Opt
 
-    create<E>(options: E & ThisType<this & E>): this & E
-    create<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
-    create<E>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this & E>): this & E
-    create<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this & E>): this & E
-    create<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this & E>): this & E
+    // Ember.Object.extend() signature:
+    // - properly sets `this`: combination of the base class and the externsion object
+    // - also infers types of parameters hooks such as setupController (received a controller and a model)
+    extend(): this & ThisType<this>
+    extend<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
+    extend<E extends Opt>(mixin1: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
 
-    // @TODD: typecheck super?
+    create<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
+    create<E extends Opt>(mixin1: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+
+
+    // @TODO: these are not the same, we should probably move to a TS class for Ember.Object?
+    reopen<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
+    reopenClass<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
+
+    // @TODD: typecheck super()?
     _super?: (...args: any[]) => any
 
     get<K extends keyof this>(propertyName: K): this[K];
@@ -120,6 +124,17 @@ declare interface EmberController extends EmberObject<ObjectOptions> {
 
 // Routes
 // @TODO: docblocks for IDE integration?
+// object passed to Ember.Route.extend()
+interface RouteOptions extends ObjectOptions
+{
+    // NOTE, whatever model() returns will be the `model` argument to setupController()? (if its a promise it will be resolved first)
+    //       (there is currently no way to handle this)
+    beforeModel?: (transition?: EmberTransition) => void | RSVP.Promise<any,any> // TODO: type parameter for Promise
+    model?: (params?: object, transition?: EmberTransition) => any
+    setupController?: (controller: EmberController, model: any) => void,
+    renderTemplate?: (controller: EmberController, model: any) => void,
+
+}
 /**
  Ember.Route
    */
@@ -131,13 +146,13 @@ declare interface EmberRoute extends EmberObject<RouteOptions> {
 }
 
 
-// Router
+//
+// Ember.Router
+//
 type EmberRouterRouteCallback<T> = (this: T) => void
 type EmberRouterRouteConfig = { resetNamespace?: boolean, path?: string }
 
 interface EmberRouter extends EmberObject<ObjectOptions> {
-    // extend<Opt extends ObjectOptions>(options: Opt): EmberRouter & ThisType<Opt & EmberRouter>
-
     route(this: this, path: string): void & ThisType<this>
     route(this: this, path: string, routeCfgOrCallback: EmberRouterRouteConfig | EmberRouterRouteCallback<this>): void & ThisType<this>
     route(this: this, path: string, routeCfg: EmberRouterRouteConfig, routeCallback: EmberRouterRouteCallback<this>): void & ThisType<this>
@@ -157,7 +172,7 @@ interface ServiceOptions extends ObjectOptions {
 //
 interface EmberService extends EmberObject<ServiceOptions> {}
 
-interface dependencyInjection {
+interface DependencyInjection {
     service: serviceLookup
     // @TODO: create an index of available controllers?
     controller: (name?: string) => EmberController
@@ -179,8 +194,10 @@ type serviceLookup = <K extends keyof _serviceTypeIndex>(serviceName: K) => _ser
 //
 type getter = <T, K extends keyof T>(obj: T, propertyName: K) => T[K]
 type setter = <T, K extends keyof T, V extends any>(obj: T, propertyName: K, value: V) => V
+type setterProperties = <T, K extends keyof T, V extends { [K in keyof T]?: T[K] }>(obj: T, values: V) => V
 type guidFor = <T extends object>(obj: T) => string
 type isNone = (val: any) => boolean
+type isArray = (val: any) => boolean
 type assert = (desc: string, obj: any) => void
 
 interface EmberLogger extends EmberObject<ObjectOptions> {
@@ -284,18 +301,29 @@ declare module Ember {
     let Component : EmberComponent
     let Route     : EmberRoute
     let Router    : EmberRouter
-    // type Service  = EmberService
+    let Mixin     : EmberMixin
     let Service   : EmberService
     let Logger    : EmberLogger
     let Application : EmberApplication
-    let Mixin     : EmberMixin
     let RSVP      : RSVPType
-    // type RSVP = RSVP
-    // TODO: expose generic types
+
+
+
+    // export types so that other interfaces can extend from Ember.***
     type Array<T> = EmberArray<T>
-    //let HTMLBars  : EmberHTMLBars
+    type Object<ObjectOptions>    = EmberObject<ObjectOptions>
+    type Controller= EmberController
+    type Component = EmberComponent
+    type Route     = EmberRoute
+    type Router    = EmberRouter
+    type Mixin     = EmberMixin
+    type Service   = EmberService
+    type Logger    = EmberLogger
+    type Application = EmberApplication
+    type RSVP      = RSVPType
 
     // @TODO:
+    let run : EmberRun
     let Helper : any
     let String : EmberString
 
@@ -304,11 +332,12 @@ declare module Ember {
     let set       : setter
 
     // services
-    let inject    : dependencyInjection
+    let inject    : DependencyInjection
 
     // helpers
     let guidFor   : guidFor
     let isNone    : isNone
+    let isArray   : isArray
     let assert    : assert
 
     // computed properties
@@ -320,6 +349,18 @@ declare module Ember {
     // - guard computed properties against overwriting through `.set()`
     // - set the proper `this` context (either with a `this parameter` or a `ThisType<T>` annotation)
     type ComputedPropertyFunc<T> = () => T
+
+    interface EmberComputedPropertyReadonly<T> {
+
+    }
+    interface EmberComputedProperty<T> {
+        readOnly: () => EmberComputedPropertyReadonly<T> | T
+    }
+    namespace computed {
+        type oneWay = <T>(observedProperty1: string) => T | EmberComputedProperty<T>
+        let oneWay : oneWay
+    }
+
     function computed<T>(fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, observedProperty2: string, fn: ComputedPropertyFunc<T>): T
@@ -328,6 +369,15 @@ declare module Ember {
     function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, observedProperty5: string, fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, observedProperty5: string, observedProperty6: string, fn: ComputedPropertyFunc<T>): T
     // ...extend number of observed properties as needed
+
+    type ObserverFunc<T> = () => T
+    function observer<T, F extends ObserverFunc<T>>(fn: F): F
+    function observer<T, F extends ObserverFunc<T>>(observedProperty1: string, fn: F): F
+    function observer<T, F extends ObserverFunc<T>>(observedProperty1: string, observedProperty2: string, fn: F): F
+    function observer<T, F extends ObserverFunc<T>>(observedProperty1: string, observedProperty2: string, observedProperty3: string, fn: F): F
+    function observer<T, F extends ObserverFunc<T>>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, fn: F): F
+    function observer<T, F extends ObserverFunc<T>>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, observedProperty5: string, fn: F): F
+    function observer<T, F extends ObserverFunc<T>>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, observedProperty5: string, observedProperty6: string, fn: F): F
 
 
 
@@ -350,11 +400,8 @@ declare module "ember-types" {
     export default Ember
 }
 
-// TODO: tie ember and ember-data together via index.d.ts
+// TODO: tie ember and ember-data together via index.d.ts?
 interface EmberRoute {
     // declare the Ember Data Store injection for all Ember.Routes
-
-    setupController?: (controller: EmberController, model: any) => void,
-    extend<E extends RouteOptions>(options: E & ThisType<this & E>): this & E
     store: EmberDataStore
 }
