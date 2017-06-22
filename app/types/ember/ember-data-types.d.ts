@@ -20,14 +20,16 @@ interface EmberDataStore extends EmberService {
 
 
     // public
-    createRecord: <K extends keyof _modelTypeIndex, V extends _modelTypeIndex[K]>(modelName: K, inputProperties: V) => _modelTypeIndex[K]
-    peakRecord: <K extends keyof _modelTypeIndex>(modelName: K, modelId: ModelId) => _modelTypeIndex[K]
+    createRecord: <K extends keyof _modelTypeIndex, V extends { [P in keyof _modelTypeIndex[K]]?: _modelTypeIndex[K][P] }>(modelName: K, inputProperties: V) => _modelTypeIndex[K]
+
+    peekRecord: <K extends keyof _modelTypeIndex>(modelName: K, modelId: ModelId) => _modelTypeIndex[K] | null
     findRecord: <K extends keyof _modelTypeIndex>(modelName: K, modelId: ModelId) => RSVP.Promise<_modelTypeIndex[K], any>
     findAll: <K extends keyof _modelTypeIndex>(modelName: K) => RSVP.Promise<Ember.Array<_modelTypeIndex[K]>, any>
+    unloadAll: <K extends keyof _modelTypeIndex>(modelName?: K) => void
 
-    serializerFor: <K extends keyof _modelTypeIndex>(modelName: K) => EmberDataRESTSerializer // @TODO: should be EmberDataSerializer
 
-    unloadAll: <K extends keyof _modelTypeIndex>(modelName?: K) => void // @TODO: should be EmberDataSerializer
+    // @TODO: should be part of EmberDataSerializer
+    serializerFor: <K extends keyof _modelTypeIndex>(modelName: K) => EmberDataRESTSerializer
 }
 
 //
@@ -127,6 +129,7 @@ interface EmberDataRESTSerializerOptions {
 interface EmberDataRESTSerializer extends EmberObject<EmberDataRESTSerializerOptions> {
 
     serializeIntoHash?: (data: object, type: EmberDataModel, snapshot: EmberDataSnapshotObject, options: { includeId?: boolean } ) => void
+    _normalizeResponse: <M extends EmberDataModel>(store: EmberDataStore, primaryModelClass: M, payload: any, id: string | number, requestType: string, isSingle: boolean) => object
 }
 
 
@@ -141,12 +144,12 @@ interface EmberDataRESTAdapterOptions {
 }
 
 // this should include any build-in properties or methods
-interface EmberDataRESTAdapter extends EmberObject<EmberDataRESTAdapterOptions>, EmberDataBuilddURLMixin {
+interface EmberDataRESTAdapter extends EmberObject<EmberDataRESTAdapterOptions>, EmberDataBuildURLMixin {
     ajax: (url: string, method: string, options: object) => RSVP.Promise<any,any>
 
 
     // @TODO: actually part of DS.BuildUrlMixin
-    buildUrl: (modelName: keyof _modelTypeIndex, id: string | number | Array<string|number>, snapshot: EmberDataSnapshotObject, requestType: string, query: object ) => string
+    // buildUrl: (modelName: keyof _modelTypeIndex, id: string | number | Array<string|number>, snapshot: EmberDataSnapshotObject, requestType: string, query: object ) => string
 }
 
 

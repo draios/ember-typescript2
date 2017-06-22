@@ -9,10 +9,10 @@
     "@types"
   ],
   "license": "MIT",
-   "author": {
-    "name" : "Maarten Veenstra @ Sysdig",
-    "email" : "maartenveenstra@gmail.com",
-    "url" : "https://github.com/draios/ember-typescript2"
+  "author": {
+    "name": "Maarten Veenstra @ Sysdig",
+    "email": "maartenveenstra@gmail.com",
+    "url": "https://github.com/draios/ember-typescript2"
   },
   "bugs": {
     "url": "https://github.com/draios/ember-typescript2/issues",
@@ -22,9 +22,8 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository" :
-  {
-    "type" : "git",
+  "repository": {
+    "type": "git",
     "url": "https://github.com/draios/ember-typescript2.git"
   },
   "scripts": {
@@ -58,7 +57,7 @@
     "ember-source": "~2.13.0",
     "ember-welcome-page": "^3.0.0",
     "loader.js": "^4.2.3",
-    "typescript": "^2.3.4"
+    "typescript": "^2.4.0"
   },
   "engines": {
     "node": ">= 4"
