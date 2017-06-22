@@ -79,6 +79,7 @@ type Global = any
 declare var global : Global
 
 //
+// **************************************************************************
 // TODO: move ember-cli these initializers and helpers into their own package
 //
 declare module "ember-load-initializers" {
@@ -134,6 +135,14 @@ declare module "ember-data/setup-container" {
   }
   let setupContainer : SetupContainer
   export default setupContainer
+}
+declare module "ember-data/instance-initializers/initialize-store-service" {
+  interface InitializeStoreService {
+    name: string
+    initialize: any
+  }
+  let initializeStoreService : InitializeStoreService
+  export default initializeStoreService
 }
 declare module "ember-data/-private/instance-initializers/initialize-store-service" {
   type InitializeStoreService = any

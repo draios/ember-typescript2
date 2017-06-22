@@ -76,22 +76,22 @@ declare interface EmberObject<Opt extends ObjectOptions> {
     // - properly sets `this`: combination of the base class and the externsion object
     // - also infers types of parameters hooks such as setupController (received a controller and a model)
     extend(): this & ThisType<this>
-    extend<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
-    extend<E extends Opt>(mixin1: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
-    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
-    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
-    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    extend<E extends Opt>(options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    extend<E extends Opt>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    extend<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
 
-    create<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
-    create<E extends Opt>(mixin1: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
-    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
-    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
-    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this>): this & E & ThisType<this>
+    create<E extends Opt>(options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    create<E extends Opt>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    create<E extends Opt>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this & E>): this & E & ThisType<this & E>
 
 
     // @TODO: these are not the same, we should probably move to a TS class for Ember.Object?
-    reopen<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
-    reopenClass<E extends Opt>(options: E & ThisType<this>): this & E & ThisType<this>
+    reopen<E extends Opt>(options: E & ThisType<this & E>): this & E & ThisType<this & E>
+    reopenClass<E extends Opt>(options: E & ThisType<this & E>): this & E & ThisType<this & E>
 
     // @TODD: typecheck super()?
     _super?: (...args: any[]) => any
