@@ -28,8 +28,7 @@ an experimental `application.d.ts` file that enables type checking on models and
 
 ## 0.5.0
 
-- fixed `ThisType<T>` annotation for Ember.Object hooks and methods (now
-  all your methods should have the right `this` context!)
+- fixed `ThisType<T>` annotation for Ember.Object.extend (now all your methods should have the right `this` context!)
 - fixed `this.store.createRecord` type
 - added basic types for BuildURLMixin
 - silenced warnings for internal Ember CLI modules when running `ember serve`
