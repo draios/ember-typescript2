@@ -69,7 +69,7 @@ interface RouteOptions extends ObjectOptions
 }
 
 // base mixin interface
-interface EmberMixin {
+interface EmberMixin extends EmberObject<ObjectOptions> {
 
 }
 
@@ -79,19 +79,28 @@ interface EmberMixin {
 declare interface EmberObject<Opt extends ObjectOptions> {
     extend<E>(options: E & ThisType<this & E>): this & E
     extend<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
+    extend<E>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this & E>): this & E
+    extend<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this & E>): this & E
+    extend<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this & E>): this & E
 
     create<E>(options: E & ThisType<this & E>): this & E
     create<E>(mixin1: EmberMixin, options: E & ThisType<this & E>): this & E
+    create<E>(mixin1: EmberMixin, mixin2: EmberMixin, options: E & ThisType<this & E>): this & E
+    create<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, options: E & ThisType<this & E>): this & E
+    create<E>(mixin1: EmberMixin, mixin2: EmberMixin, mixin3: EmberMixin, mixin4: EmberMixin, options: E & ThisType<this & E>): this & E
 
     // @TODD: typecheck super?
     _super?: (...args: any[]) => any
 
     get<K extends keyof this>(propertyName: K): this[K];
     set<K extends keyof this, V extends this[K]>(propertyName: K, value: V): V;
+
+    setProperties<K extends keyof this, V extends { [K in keyof this]?: this[K] }>(values: V) : V;
 }
 
 // Components
 declare interface EmberComponent extends EmberObject<ObjectOptions> {
+    sendAction: (action: string, params: any & ThisType<this>) => void
 }
 
 
@@ -242,6 +251,17 @@ interface EmberString {
 }
 
 
+// Ember String.prototype extensions
+interface String {
+    fmt: (...args: Array<string>) => string
+}
+
+
+interface EmberRun {
+    later: (target: object, method: Function|string, args: any, wait?: number) => object
+    next: (target: object, method: Function|string, args: any) => object
+    cancel: (timer: any) => boolean
+}
 
 
 
@@ -255,6 +275,7 @@ interface EmberString {
 
 // @TODO: define as `interface` instead of `namespace`?
 // import * as $ from "jquery";
+type RSVPType = typeof RSVP
 declare module Ember {
 
     // export all pieces of the Ember framework
@@ -267,7 +288,8 @@ declare module Ember {
     let Service   : EmberService
     let Logger    : EmberLogger
     let Application : EmberApplication
-    // let RSVP      : RSVP
+    let Mixin     : EmberMixin
+    let RSVP      : RSVPType
     // type RSVP = RSVP
     // TODO: expose generic types
     type Array<T> = EmberArray<T>
@@ -298,9 +320,13 @@ declare module Ember {
     // - guard computed properties against overwriting through `.set()`
     // - set the proper `this` context (either with a `this parameter` or a `ThisType<T>` annotation)
     type ComputedPropertyFunc<T> = () => T
+    function computed<T>(fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, observedProperty2: string, fn: ComputedPropertyFunc<T>): T
     function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, fn: ComputedPropertyFunc<T>): T
+    function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, fn: ComputedPropertyFunc<T>): T
+    function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, observedProperty5: string, fn: ComputedPropertyFunc<T>): T
+    function computed<T>(observedProperty1: string, observedProperty2: string, observedProperty3: string, observedProperty4: string, observedProperty5: string, observedProperty6: string, fn: ComputedPropertyFunc<T>): T
     // ...extend number of observed properties as needed
 
 
