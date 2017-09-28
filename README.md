@@ -1,4 +1,15 @@
-# Ember CLI with TypeScript 2.3+ (EXPERIMENTAL)
+# DEPRECATED
+
+This repository is no longer being mainained.
+
+Please refer to the Ember&TypeScript repositories at `typed-ember`:
+- [typed-ember/ember-typings](https://github.com/typed-ember/ember-typings)
+- [ember-cli-typescript](https://github.com/typed-ember/ember-cli-typescript)
+
+Also be sure to checkout #topic-typescript on the Ember slack community!
+
+
+# Ember CLI with Typescript 2.x (EXPERIMENTAL)
 
 This README outlines the details of collaborating on this Ember addon (_see: "Contributing"_)
 
